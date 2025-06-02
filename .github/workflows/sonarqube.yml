@@ -1,0 +1,22 @@
+name: SonarQube Scan
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  sonarqube:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+      - run: npm install
+      - run: npm test
+      - name: Run SonarQube
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: |
+          npm install -g sonarqube-scanner
+          npx sonarqube-scanner
